@@ -1,0 +1,23 @@
+main.py
+from flask import Flask, request
+from twilio.twiml.messaging_response import MessagingResponse
+
+app = Flask(__name__)
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    incoming_msg = request.values.get("Body", "").lower()
+    resp = MessagingResponse()
+    msg = resp.message()
+    
+    if "oi" in incoming_msg:
+        response_text = "Oi! Como posso te ajudar hoje?"
+    else:
+        response_text = "Desculpe, não entendi. Tente dizer 'Oi'!"
+    
+    msg.body(response_text)
+    return str(resp)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
+
